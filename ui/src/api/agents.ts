@@ -197,6 +197,15 @@ export const agentsApi = {
     api.post<ClaudeLoginResult>(agentPath(id, companyId, "/claude-login"), {}),
   availableSkills: () =>
     api.get<{ skills: AvailableSkill[] }>("/skills/available"),
+  casualChat: (
+    id: string,
+    messages: { role: "user" | "assistant"; content: string }[],
+    options?: { model?: string },
+  ) =>
+    api.post<{ content: string; model: string }>(`/agents/${encodeURIComponent(id)}/casual-chat`, {
+      messages,
+      ...(options?.model ? { model: options.model } : {}),
+    }),
 };
 
 export interface AvailableSkill {

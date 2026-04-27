@@ -1,0 +1,10 @@
+[   83647ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ http://localhost:5173/node_modules/.vite/deps/chunk-DITMC2R2.js?v=1bbfffbb:2178
+[   83651ms] [ERROR] `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users.
+
+If you want to hide the `DialogTitle`, you can wrap it with our VisuallyHidden component.
+
+For more information, see https://radix-ui.com/primitives/docs/components/dialog @ http://localhost:5173/node_modules/.vite/deps/chunk-DITMC2R2.js?v=1bbfffbb:2178

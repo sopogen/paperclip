@@ -1,0 +1,66 @@
+[     948ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <Popper __scopePopper={{Popper:[...]}}>
+      <PopperProvider scope={{Popper:[...]}} anchor={null} onAnchorChange={function bound dispatchSetState}>
+        <PopoverProvider scope={undefined} contentId="radix-_r_10_" triggerRef={{current:null}} open={false} ...>
+          <PopoverTrigger asChild={true} onMouseEnter={function onMouseEnter} onMouseLeave={function onMouseLeave}>
+            <PopoverTrigger data-slot="popover-tr..." asChild={true} onMouseEnter={function onMouseEnter} ...>
+              <PopperAnchor asChild={true} __scopePopper={{Popper:[...]}}>
+                <Primitive.div asChild={true} ref={function}>
+                  <Primitive.div.Slot ref={function}>
+                    <Primitive.div.SlotClone ref={function}>
+                      <Primitive.button type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                        <Primitive.button.Slot type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                          <Primitive.button.SlotClone type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                            <LinkWithRef ref={function} to="/JH/issues..." state={undefined} className="px-4 py-2 ..." ...>
+>                             <a
+>                               className="px-4 py-2 text-sm cursor-pointer hover:bg-accent/50 transition-colors no-un..."
+>                               onMouseEnter={function}
+>                               onFocus={function onFocus}
+>                               onTouchStart={function onTouchStart}
+>                               onClickCapture={function onClickCapture}
+>                               type="button"
+>                               aria-haspopup="dialog"
+>                               aria-expanded={false}
+>                               aria-controls="radix-_r_10_"
+>                               data-state="closed"
+>                               data-slot="popover-trigger"
+>                               onMouseLeave={function onMouseLeave}
+>                               href="/JH/issues/JH-1"
+>                               onClick={function handleClick}
+>                               ref={function}
+>                               target={undefined}
+>                               data-discover="true"
+>                             >
+                                ...
+                                  <Primitive.button.Slot type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                                    <Primitive.button.SlotClone type="button" aria-haspopup="dialog" ...>
+                                      <LinkWithRef ref={function} to="/JH/issues..." state={undefined} ...>
+>                                       <a
+>                                         className="paperclip-mention-chip paperclip-mention-chip--issue inline-flex ..."
+>                                         onMouseEnter={function}
+>                                         onFocus={function onFocus}
+>                                         onTouchStart={function onTouchStart}
+>                                         onClickCapture={function onClickCapture}
+>                                         data-mention-kind="issue"
+>                                         title="Engineering readiness: set up project structure and dev workflow"
+>                                         aria-label="Issue JH-2: Engineering readiness: set up project structure and ..."
+>                                         type="button"
+>                                         aria-haspopup="dialog"
+>                                         aria-expanded={false}
+>                                         aria-controls="radix-_r_11_"
+>                                         data-state="closed"
+>                                         data-slot="popover-trigger"
+>                                         onMouseLeave={function onMouseLeave}
+>                                         href="/JH/issues/JH-2"
+>                                         onClick={function handleClick}
+>                                         ref={function}
+>                                         target={undefined}
+>                                         data-discover="true"
+>                                       >
+          ...
+ @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=49763da0:2155
+[     948ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=49763da0:2162

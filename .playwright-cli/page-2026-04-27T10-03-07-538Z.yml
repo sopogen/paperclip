@@ -1,0 +1,379 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - generic [ref=e12]:
+            - button "J" [ref=e13]:
+              - link "J" [ref=e14] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - generic [ref=e17]:
+                  - img [ref=e18]
+                  - generic [ref=e19]: J
+            - status [ref=e20]
+          - button "Add company" [ref=e23]:
+            - img [ref=e24]
+        - complementary [ref=e26]:
+          - generic [ref=e27]:
+            - button "Open JH menu" [ref=e28]:
+              - generic [ref=e30]: JH
+              - img
+            - button [ref=e31]:
+              - img
+          - navigation [ref=e32]:
+            - generic [ref=e33]:
+              - button "New Issue" [ref=e34]:
+                - img [ref=e35]
+                - generic [ref=e38]: New Issue
+              - link "Dashboard" [ref=e211] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - img [ref=e41]
+                - generic [ref=e46]: Dashboard
+              - link "Inbox 2" [ref=e52] [cursor=pointer]:
+                - /url: /JH/inbox
+                - img [ref=e54]
+                - generic [ref=e57]: Inbox
+                - generic [ref=e58]: "2"
+            - generic [ref=e59]:
+              - generic [ref=e60]: Work
+              - generic [ref=e61]:
+                - link "Issues" [ref=e62] [cursor=pointer]:
+                  - /url: /JH/issues
+                  - img [ref=e64]
+                  - generic [ref=e67]: Issues
+                - link "Routines" [ref=e68] [cursor=pointer]:
+                  - /url: /JH/routines
+                  - img [ref=e70]
+                  - generic [ref=e75]: Routines
+                - link "Goals" [ref=e76] [cursor=pointer]:
+                  - /url: /JH/goals
+                  - img [ref=e78]
+                  - generic [ref=e82]: Goals
+            - generic [ref=e83]:
+              - generic [ref=e85]:
+                - button "Projects" [expanded] [ref=e86]:
+                  - img [ref=e87]
+                  - generic [ref=e89]: Projects
+                - button "New project" [ref=e90]:
+                  - img [ref=e91]
+              - generic [ref=e92]:
+                - button "Onboarding" [ref=e94]:
+                  - link "Onboarding" [ref=e96] [cursor=pointer]:
+                    - /url: /JH/projects/onboarding/issues
+                    - generic [ref=e98]: Onboarding
+                - status [ref=e99]
+            - generic [ref=e100]:
+              - generic [ref=e102]:
+                - button "Agents" [expanded] [ref=e103]:
+                  - img [ref=e104]
+                  - generic [ref=e106]: Agents
+                - button "New agent" [ref=e107]:
+                  - img [ref=e108]
+              - generic [ref=e110]:
+                - link "Pixel Office" [ref=e111] [cursor=pointer]:
+                  - /url: /JH/agents/pixel
+                  - img [ref=e112]
+                  - generic [ref=e114]: Pixel Office
+                - link "CEO" [ref=e115] [cursor=pointer]:
+                  - /url: /JH/agents/ceo/dashboard
+                  - img [ref=e116]
+                  - generic [ref=e119]: CEO
+                - link "CTO" [ref=e212] [cursor=pointer]:
+                  - /url: /JH/agents/cto/dashboard
+                  - img [ref=e121]
+                  - generic [ref=e123]: CTO
+            - generic [ref=e129]:
+              - generic [ref=e130]: Company
+              - generic [ref=e131]:
+                - link "Org" [ref=e132] [cursor=pointer]:
+                  - /url: /JH/org
+                  - img [ref=e134]
+                  - generic [ref=e139]: Org
+                - link "Skills" [ref=e140] [cursor=pointer]:
+                  - /url: /JH/skills
+                  - img [ref=e142]
+                  - generic [ref=e152]: Skills
+                - link "Costs" [ref=e153] [cursor=pointer]:
+                  - /url: /JH/costs
+                  - img [ref=e155]
+                  - generic [ref=e157]: Costs
+                - link "Activity" [ref=e158] [cursor=pointer]:
+                  - /url: /JH/activity
+                  - img [ref=e160]
+                  - generic [ref=e164]: Activity
+                - link "Settings" [ref=e165] [cursor=pointer]:
+                  - /url: /JH/company/settings
+                  - img [ref=e167]
+                  - generic [ref=e170]: Settings
+      - button "Open account menu" [ref=e172]:
+        - generic [ref=e174]: BO
+        - generic [ref=e175]: Board
+    - generic [ref=e176]:
+      - navigation "breadcrumb" [ref=e215]:
+        - list [ref=e216]:
+          - listitem [ref=e217]:
+            - link "Agents" [ref=e218] [cursor=pointer]:
+              - /url: /JH/agents
+          - listitem [ref=e219]:
+            - img [ref=e220]
+          - listitem [ref=e222]:
+            - link "CTO" [disabled] [ref=e223]
+      - main [active] [ref=e182]:
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - button [ref=e227]:
+                - img [ref=e228]
+              - generic [ref=e230]:
+                - heading "CTO" [level=2] [ref=e231]
+                - paragraph [ref=e232]: CTO - Chief Technology Officer
+            - generic [ref=e233]:
+              - button "Assign Task" [ref=e234]:
+                - img
+                - generic [ref=e235]: Assign Task
+              - button "Run Heartbeat" [ref=e236]:
+                - img
+                - generic [ref=e237]: Run Heartbeat
+              - button "Pause" [ref=e238]:
+                - img
+                - generic [ref=e239]: Pause
+              - generic [ref=e241]: idle
+              - button [ref=e242]:
+                - img
+          - tablist [ref=e244]:
+            - tab "Dashboard" [selected] [ref=e245]
+            - tab "Instructions" [ref=e246]
+            - tab "Skills" [ref=e247]
+            - tab "Configuration" [ref=e248]
+            - tab "Runs" [ref=e249]
+            - tab "Budget" [ref=e250]
+          - generic [ref=e251]:
+            - generic [ref=e252]:
+              - generic [ref=e253]:
+                - heading "Latest Run" [level=3] [ref=e254]
+                - link "View details →" [ref=e255] [cursor=pointer]:
+                  - /url: /JH/agents/cto/runs/83dccd8e-35a6-489b-bce9-23822f794311
+              - link "succeeded 83dccd8e Automation just now Inbox is empty — no assigned tasks in any active status. This heartbeat was triggered by a process_lost_retry wake with no task context, and there's nothing to act on. Exiting cleanly." [ref=e256] [cursor=pointer]:
+                - /url: /JH/agents/cto/runs/83dccd8e-35a6-489b-bce9-23822f794311
+                - generic [ref=e257]:
+                  - img [ref=e258]
+                  - generic [ref=e261]: succeeded
+                  - generic [ref=e262]: 83dccd8e
+                  - generic [ref=e263]: Automation
+                  - generic [ref=e264]: just now
+                - paragraph [ref=e267]:
+                  - text: Inbox is empty — no assigned tasks in any active status. This heartbeat was triggered by a
+                  - code [ref=e268]: process_lost_retry
+                  - text: wake with no task context, and there's nothing to act on. Exiting cleanly.
+            - generic [ref=e269]:
+              - generic [ref=e270]:
+                - generic [ref=e271]:
+                  - heading "Run Activity" [level=3] [ref=e272]
+                  - text: Last 14 days
+                - generic [ref=e273]:
+                  - generic [ref=e274]:
+                    - 'generic "2026-04-14: 0 runs" [ref=e275]'
+                    - 'generic "2026-04-15: 0 runs" [ref=e277]'
+                    - 'generic "2026-04-16: 0 runs" [ref=e279]'
+                    - 'generic "2026-04-17: 0 runs" [ref=e281]'
+                    - 'generic "2026-04-18: 0 runs" [ref=e283]'
+                    - 'generic "2026-04-19: 0 runs" [ref=e285]'
+                    - 'generic "2026-04-20: 0 runs" [ref=e287]'
+                    - 'generic "2026-04-21: 0 runs" [ref=e289]'
+                    - 'generic "2026-04-22: 0 runs" [ref=e291]'
+                    - 'generic "2026-04-23: 0 runs" [ref=e293]'
+                    - 'generic "2026-04-24: 0 runs" [ref=e295]'
+                    - 'generic "2026-04-25: 0 runs" [ref=e297]'
+                    - 'generic "2026-04-26: 0 runs" [ref=e299]'
+                    - 'generic "2026-04-27: 4 runs" [ref=e301]'
+                  - generic [ref=e305]:
+                    - generic [ref=e306]: 4/14
+                    - generic [ref=e312]: 4/20
+                    - generic [ref=e319]: 4/27
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - heading "Issues by Priority" [level=3] [ref=e322]
+                  - text: Last 14 days
+                - generic [ref=e323]:
+                  - generic [ref=e324]:
+                    - 'generic "2026-04-14: 0 issues" [ref=e325]'
+                    - 'generic "2026-04-15: 0 issues" [ref=e327]'
+                    - 'generic "2026-04-16: 0 issues" [ref=e329]'
+                    - 'generic "2026-04-17: 0 issues" [ref=e331]'
+                    - 'generic "2026-04-18: 0 issues" [ref=e333]'
+                    - 'generic "2026-04-19: 0 issues" [ref=e335]'
+                    - 'generic "2026-04-20: 0 issues" [ref=e337]'
+                    - 'generic "2026-04-21: 0 issues" [ref=e339]'
+                    - 'generic "2026-04-22: 0 issues" [ref=e341]'
+                    - 'generic "2026-04-23: 0 issues" [ref=e343]'
+                    - 'generic "2026-04-24: 0 issues" [ref=e345]'
+                    - 'generic "2026-04-25: 0 issues" [ref=e347]'
+                    - 'generic "2026-04-26: 0 issues" [ref=e349]'
+                    - 'generic "2026-04-27: 1 issues" [ref=e351]'
+                  - generic [ref=e354]:
+                    - generic [ref=e355]: 4/14
+                    - generic [ref=e361]: 4/20
+                    - generic [ref=e368]: 4/27
+                  - generic [ref=e369]:
+                    - generic [ref=e370]: Critical
+                    - generic [ref=e372]: High
+                    - generic [ref=e374]: Medium
+                    - generic [ref=e376]: Low
+              - generic [ref=e378]:
+                - generic [ref=e379]:
+                  - heading "Issues by Status" [level=3] [ref=e380]
+                  - text: Last 14 days
+                - generic [ref=e381]:
+                  - generic [ref=e382]:
+                    - 'generic "2026-04-14: 0 issues" [ref=e383]'
+                    - 'generic "2026-04-15: 0 issues" [ref=e385]'
+                    - 'generic "2026-04-16: 0 issues" [ref=e387]'
+                    - 'generic "2026-04-17: 0 issues" [ref=e389]'
+                    - 'generic "2026-04-18: 0 issues" [ref=e391]'
+                    - 'generic "2026-04-19: 0 issues" [ref=e393]'
+                    - 'generic "2026-04-20: 0 issues" [ref=e395]'
+                    - 'generic "2026-04-21: 0 issues" [ref=e397]'
+                    - 'generic "2026-04-22: 0 issues" [ref=e399]'
+                    - 'generic "2026-04-23: 0 issues" [ref=e401]'
+                    - 'generic "2026-04-24: 0 issues" [ref=e403]'
+                    - 'generic "2026-04-25: 0 issues" [ref=e405]'
+                    - 'generic "2026-04-26: 0 issues" [ref=e407]'
+                    - 'generic "2026-04-27: 1 issues" [ref=e409]'
+                  - generic [ref=e412]:
+                    - generic [ref=e413]: 4/14
+                    - generic [ref=e419]: 4/20
+                    - generic [ref=e426]: 4/27
+                  - generic [ref=e428]: Done
+              - generic [ref=e430]:
+                - generic [ref=e431]:
+                  - heading "Success Rate" [level=3] [ref=e432]
+                  - text: Last 14 days
+                - generic [ref=e433]:
+                  - generic [ref=e434]:
+                    - 'generic "2026-04-14: 0% (0/0)" [ref=e435]'
+                    - 'generic "2026-04-15: 0% (0/0)" [ref=e437]'
+                    - 'generic "2026-04-16: 0% (0/0)" [ref=e439]'
+                    - 'generic "2026-04-17: 0% (0/0)" [ref=e441]'
+                    - 'generic "2026-04-18: 0% (0/0)" [ref=e443]'
+                    - 'generic "2026-04-19: 0% (0/0)" [ref=e445]'
+                    - 'generic "2026-04-20: 0% (0/0)" [ref=e447]'
+                    - 'generic "2026-04-21: 0% (0/0)" [ref=e449]'
+                    - 'generic "2026-04-22: 0% (0/0)" [ref=e451]'
+                    - 'generic "2026-04-23: 0% (0/0)" [ref=e453]'
+                    - 'generic "2026-04-24: 0% (0/0)" [ref=e455]'
+                    - 'generic "2026-04-25: 0% (0/0)" [ref=e457]'
+                    - 'generic "2026-04-26: 0% (0/0)" [ref=e459]'
+                    - 'generic "2026-04-27: 75% (3/4)" [ref=e461]'
+                  - generic [ref=e463]:
+                    - generic [ref=e464]: 4/14
+                    - generic [ref=e470]: 4/20
+                    - generic [ref=e477]: 4/27
+            - generic [ref=e478]:
+              - generic [ref=e479]:
+                - heading "Recent Issues" [level=3] [ref=e480]
+                - link "See All →" [ref=e481] [cursor=pointer]:
+                  - /url: /JH/issues?participantAgentId=d0737566-c1db-4328-9f72-8c31d6302dc2
+              - generic [ref=e482]:
+                - link "JH-1 Hire your first engineer and create a hiring plan done" [ref=e483] [cursor=pointer]:
+                  - /url: /JH/issues/JH-1
+                  - generic [ref=e485]:
+                    - generic [ref=e486]: JH-1
+                    - generic [ref=e487]: Hire your first engineer and create a hiring plan
+                  - generic [ref=e489]: done
+                - 'link "JH-2 Engineering readiness: set up project structure and dev workflow done" [ref=e490] [cursor=pointer]':
+                  - /url: /JH/issues/JH-2
+                  - generic [ref=e492]:
+                    - generic [ref=e493]: JH-2
+                    - generic [ref=e494]: "Engineering readiness: set up project structure and dev workflow"
+                  - generic [ref=e496]: done
+            - generic [ref=e497]:
+              - heading "Costs" [level=3] [ref=e498]
+              - generic [ref=e499]:
+                - generic [ref=e501]:
+                  - generic [ref=e502]:
+                    - generic [ref=e503]: Input tokens
+                    - text: "71"
+                  - generic [ref=e504]:
+                    - generic [ref=e505]: Output tokens
+                    - text: 18.7k
+                  - generic [ref=e506]:
+                    - generic [ref=e507]: Cached tokens
+                    - text: 1.5M
+                  - generic [ref=e508]:
+                    - generic [ref=e509]: Total cost
+                    - text: $0.00
+                - table [ref=e511]:
+                  - rowgroup [ref=e512]:
+                    - row "Date Run Input Output Cost" [ref=e513]:
+                      - columnheader "Date" [ref=e514]
+                      - columnheader "Run" [ref=e515]
+                      - columnheader "Input" [ref=e516]
+                      - columnheader "Output" [ref=e517]
+                      - columnheader "Cost" [ref=e518]
+                  - rowgroup [ref=e519]:
+                    - row "Apr 27, 2026 83dccd8e 8 575 -" [ref=e520]:
+                      - cell "Apr 27, 2026" [ref=e521]
+                      - cell "83dccd8e" [ref=e522]
+                      - cell "8" [ref=e523]
+                      - cell "575" [ref=e524]
+                      - cell "-" [ref=e525]
+                    - row "Apr 27, 2026 fe3df042 16 7.2k -" [ref=e526]:
+                      - cell "Apr 27, 2026" [ref=e527]
+                      - cell "fe3df042" [ref=e528]
+                      - cell "16" [ref=e529]
+                      - cell "7.2k" [ref=e530]
+                      - cell "-" [ref=e531]
+                    - row "Apr 27, 2026 419ea0cc 15 4.1k -" [ref=e532]:
+                      - cell "Apr 27, 2026" [ref=e533]
+                      - cell "419ea0cc" [ref=e534]
+                      - cell "15" [ref=e535]
+                      - cell "4.1k" [ref=e536]
+                      - cell "-" [ref=e537]
+                    - row "Apr 2, 2026 f469ed70 0 0 -" [ref=e538]:
+                      - cell "Apr 2, 2026" [ref=e539]
+                      - cell "f469ed70" [ref=e540]
+                      - cell "0" [ref=e541]
+                      - cell "0" [ref=e542]
+                      - cell "-" [ref=e543]
+                    - row "Apr 2, 2026 f4c8b708 0 0 -" [ref=e544]:
+                      - cell "Apr 2, 2026" [ref=e545]
+                      - cell "f4c8b708" [ref=e546]
+                      - cell "0" [ref=e547]
+                      - cell "0" [ref=e548]
+                      - cell "-" [ref=e549]
+                    - row "Apr 2, 2026 a10a7e9a 0 0 -" [ref=e550]:
+                      - cell "Apr 2, 2026" [ref=e551]
+                      - cell "a10a7e9a" [ref=e552]
+                      - cell "0" [ref=e553]
+                      - cell "0" [ref=e554]
+                      - cell "-" [ref=e555]
+                    - row "Apr 2, 2026 4d193741 0 0 -" [ref=e556]:
+                      - cell "Apr 2, 2026" [ref=e557]
+                      - cell "4d193741" [ref=e558]
+                      - cell "0" [ref=e559]
+                      - cell "0" [ref=e560]
+                      - cell "-" [ref=e561]
+                    - row "Apr 2, 2026 a7d2f70f 0 0 -" [ref=e562]:
+                      - cell "Apr 2, 2026" [ref=e563]
+                      - cell "a7d2f70f" [ref=e564]
+                      - cell "0" [ref=e565]
+                      - cell "0" [ref=e566]
+                      - cell "-" [ref=e567]
+                    - row "Apr 2, 2026 8b96a69b 0 0 -" [ref=e568]:
+                      - cell "Apr 2, 2026" [ref=e569]
+                      - cell "8b96a69b" [ref=e570]
+                      - cell "0" [ref=e571]
+                      - cell "0" [ref=e572]
+                      - cell "-" [ref=e573]
+                    - row "Apr 2, 2026 ae86140f 0 0 -" [ref=e574]:
+                      - cell "Apr 2, 2026" [ref=e575]
+                      - cell "ae86140f" [ref=e576]
+                      - cell "0" [ref=e577]
+                      - cell "0" [ref=e578]
+                      - cell "-" [ref=e579]
+  - generic [ref=e208]:
+    - heading "Command Palette" [level=2] [ref=e209]
+    - paragraph [ref=e210]: Search for a command to run...

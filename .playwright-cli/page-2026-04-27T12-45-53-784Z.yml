@@ -1,0 +1,159 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - generic [ref=e12]:
+            - button "J" [ref=e13]:
+              - link "J" [ref=e14] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - generic [ref=e17]:
+                  - img [ref=e18]
+                  - generic [ref=e19]: J
+            - status [ref=e20]
+          - button "Add company" [ref=e23]:
+            - img [ref=e24]
+        - complementary [ref=e26]:
+          - generic [ref=e27]:
+            - button "Open JH menu" [ref=e28]:
+              - generic [ref=e30]: JH
+              - img
+            - button [ref=e31]:
+              - img
+          - navigation [ref=e32]:
+            - generic [ref=e33]:
+              - button "New Issue" [ref=e34]:
+                - img [ref=e35]
+                - generic [ref=e38]: New Issue
+              - link "Dashboard" [ref=e39] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - img [ref=e41]
+                - generic [ref=e46]: Dashboard
+              - link "Inbox" [ref=e47] [cursor=pointer]:
+                - /url: /JH/inbox
+                - img [ref=e49]
+                - generic [ref=e52]: Inbox
+            - generic [ref=e53]:
+              - generic [ref=e54]: Work
+              - generic [ref=e55]:
+                - link "Issues" [ref=e56] [cursor=pointer]:
+                  - /url: /JH/issues
+                  - img [ref=e58]
+                  - generic [ref=e61]: Issues
+                - link "Routines" [ref=e62] [cursor=pointer]:
+                  - /url: /JH/routines
+                  - img [ref=e64]
+                  - generic [ref=e69]: Routines
+                - link "Goals" [ref=e70] [cursor=pointer]:
+                  - /url: /JH/goals
+                  - img [ref=e72]
+                  - generic [ref=e76]: Goals
+            - generic [ref=e77]:
+              - generic [ref=e79]:
+                - button "Projects" [expanded] [ref=e80]:
+                  - img [ref=e81]
+                  - generic [ref=e83]: Projects
+                - button "New project" [ref=e84]:
+                  - img [ref=e85]
+              - generic [ref=e86]:
+                - button "Onboarding" [ref=e88]:
+                  - link "Onboarding" [ref=e90] [cursor=pointer]:
+                    - /url: /JH/projects/onboarding/issues
+                    - generic [ref=e92]: Onboarding
+                - status [ref=e93]
+            - generic [ref=e94]:
+              - generic [ref=e96]:
+                - button "Agents" [expanded] [ref=e97]:
+                  - img [ref=e98]
+                  - generic [ref=e100]: Agents
+                - button "New agent" [ref=e101]:
+                  - img [ref=e102]
+              - generic [ref=e104]:
+                - link "The Office" [ref=e105] [cursor=pointer]:
+                  - /url: /JH/agents/pixel
+                  - img [ref=e106]
+                  - generic [ref=e108]: The Office
+                - link "CEO" [ref=e109] [cursor=pointer]:
+                  - /url: /JH/agents/ceo/instructions
+                  - img [ref=e110]
+                  - generic [ref=e113]: CEO
+                - link "CTO" [ref=e114] [cursor=pointer]:
+                  - /url: /JH/agents/cto/instructions
+                  - img [ref=e115]
+                  - generic [ref=e117]: CTO
+            - generic [ref=e118]:
+              - generic [ref=e119]: Company
+              - generic [ref=e120]:
+                - link "Org" [ref=e121] [cursor=pointer]:
+                  - /url: /JH/org
+                  - img [ref=e123]
+                  - generic [ref=e128]: Org
+                - link "Skills" [ref=e129] [cursor=pointer]:
+                  - /url: /JH/skills
+                  - img [ref=e131]
+                  - generic [ref=e141]: Skills
+                - link "Costs" [ref=e142] [cursor=pointer]:
+                  - /url: /JH/costs
+                  - img [ref=e144]
+                  - generic [ref=e146]: Costs
+                - link "Activity" [ref=e147] [cursor=pointer]:
+                  - /url: /JH/activity
+                  - img [ref=e149]
+                  - generic [ref=e153]: Activity
+                - link "Settings" [ref=e154] [cursor=pointer]:
+                  - /url: /JH/company/settings
+                  - img [ref=e156]
+                  - generic [ref=e159]: Settings
+      - button "Open account menu" [ref=e161]:
+        - generic [ref=e163]: BO
+        - generic [ref=e164]: Board
+    - generic [ref=e165]:
+      - navigation "breadcrumb" [ref=e169]:
+        - list [ref=e170]:
+          - listitem [ref=e171]:
+            - link "Agents" [ref=e172] [cursor=pointer]:
+              - /url: /JH/agents
+          - listitem [ref=e173]:
+            - img [ref=e174]
+          - listitem [ref=e176]:
+            - link "CTO" [ref=e177] [cursor=pointer]:
+              - /url: /JH/agents/cto/dashboard
+          - listitem [ref=e178]:
+            - img [ref=e179]
+          - listitem [ref=e181]:
+            - link "Instructions" [disabled] [ref=e182]
+      - main [active] [ref=e184]:
+        - generic [ref=e185]:
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - button [ref=e188]:
+                - img [ref=e189]
+              - generic [ref=e191]:
+                - heading "CTO" [level=2] [ref=e192]
+                - paragraph [ref=e193]: CTO - Chief Technology Officer
+            - generic [ref=e194]:
+              - button "Assign Task" [ref=e195]:
+                - img
+                - generic [ref=e196]: Assign Task
+              - button "Run Heartbeat" [ref=e197]:
+                - img
+                - generic [ref=e198]: Run Heartbeat
+              - button "Pause" [ref=e199]:
+                - img
+                - generic [ref=e200]: Pause
+              - generic [ref=e202]: idle
+              - button [ref=e203]:
+                - img
+          - tablist [ref=e205]:
+            - tab "Dashboard" [ref=e206]
+            - tab "Instructions" [selected] [ref=e207]
+            - tab "Skills" [ref=e208]
+            - tab "Configuration" [ref=e209]
+            - tab "Runs" [ref=e210]
+            - tab "Budget" [ref=e211]
+  - generic [ref=e248]:
+    - heading "Command Palette" [level=2] [ref=e249]
+    - paragraph [ref=e250]: Search for a command to run...

@@ -1,0 +1,169 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - generic [ref=e12]:
+            - button "J" [ref=e13]:
+              - link "J" [ref=e14] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - generic [ref=e17]:
+                  - img [ref=e18]
+                  - generic [ref=e19]: J
+            - status [ref=e20]
+          - button "Add company" [ref=e23]:
+            - img [ref=e24]
+        - complementary [ref=e26]:
+          - generic [ref=e27]:
+            - button "Open JH menu" [ref=e28]:
+              - generic [ref=e30]: JH
+              - img
+            - button [ref=e31]:
+              - img
+          - navigation [ref=e32]:
+            - generic [ref=e33]:
+              - button "New Issue" [ref=e34]:
+                - img [ref=e35]
+                - generic [ref=e38]: New Issue
+              - link "Dashboard" [ref=e39] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - img [ref=e41]
+                - generic [ref=e46]: Dashboard
+              - link "Inbox 3" [ref=e47] [cursor=pointer]:
+                - /url: /JH/inbox
+                - img [ref=e49]
+                - generic [ref=e52]: Inbox
+                - generic [ref=e53]: "3"
+            - generic [ref=e54]:
+              - generic [ref=e55]: Work
+              - generic [ref=e56]:
+                - link "Issues" [ref=e57] [cursor=pointer]:
+                  - /url: /JH/issues
+                  - img [ref=e59]
+                  - generic [ref=e62]: Issues
+                - link "Routines" [ref=e63] [cursor=pointer]:
+                  - /url: /JH/routines
+                  - img [ref=e65]
+                  - generic [ref=e70]: Routines
+                - link "Goals" [ref=e71] [cursor=pointer]:
+                  - /url: /JH/goals
+                  - img [ref=e73]
+                  - generic [ref=e77]: Goals
+            - generic [ref=e78]:
+              - generic [ref=e80]:
+                - button "Projects" [expanded] [ref=e81]:
+                  - img [ref=e82]
+                  - generic [ref=e84]: Projects
+                - button "New project" [ref=e85]:
+                  - img [ref=e86]
+              - generic [ref=e87]:
+                - button "Onboarding" [ref=e89]:
+                  - link "Onboarding" [ref=e91] [cursor=pointer]:
+                    - /url: /JH/projects/onboarding/issues
+                    - generic [ref=e93]: Onboarding
+                - status [ref=e94]
+            - generic [ref=e95]:
+              - generic [ref=e97]:
+                - button "Agents" [expanded] [ref=e98]:
+                  - img [ref=e99]
+                  - generic [ref=e101]: Agents
+                - button "New agent" [ref=e102]:
+                  - img [ref=e103]
+              - generic [ref=e105]:
+                - link "The Office" [ref=e106] [cursor=pointer]:
+                  - /url: /JH/agents/pixel
+                  - img [ref=e107]
+                  - generic [ref=e109]: The Office
+                - link "CEO" [ref=e110] [cursor=pointer]:
+                  - /url: /JH/agents/ceo
+                  - img [ref=e111]
+                  - generic [ref=e114]: CEO
+                - link "CTO" [ref=e115] [cursor=pointer]:
+                  - /url: /JH/agents/cto
+                  - img [ref=e116]
+                  - generic [ref=e118]: CTO
+            - generic [ref=e119]:
+              - generic [ref=e120]: Company
+              - generic [ref=e121]:
+                - link "Org" [ref=e122] [cursor=pointer]:
+                  - /url: /JH/org
+                  - img [ref=e124]
+                  - generic [ref=e129]: Org
+                - link "Skills" [ref=e130] [cursor=pointer]:
+                  - /url: /JH/skills
+                  - img [ref=e132]
+                  - generic [ref=e142]: Skills
+                - link "Costs" [ref=e143] [cursor=pointer]:
+                  - /url: /JH/costs
+                  - img [ref=e145]
+                  - generic [ref=e147]: Costs
+                - link "Activity" [ref=e148] [cursor=pointer]:
+                  - /url: /JH/activity
+                  - img [ref=e150]
+                  - generic [ref=e154]: Activity
+                - link "Settings" [ref=e155] [cursor=pointer]:
+                  - /url: /JH/company/settings
+                  - img [ref=e157]
+                  - generic [ref=e160]: Settings
+      - button "Open account menu" [ref=e162]:
+        - generic [ref=e164]: BO
+        - generic [ref=e165]: Board
+    - generic [ref=e166]:
+      - heading "The Office" [level=1] [ref=e170]
+      - main [ref=e172]:
+        - generic [ref=e173]:
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - img [ref=e176]
+              - heading "The Office" [level=1] [ref=e178]
+            - generic [ref=e179]:
+              - button "0 active" [ref=e180]: 0 active
+              - button "2 idle" [ref=e182]: 2 idle
+          - generic [ref=e188]:
+            - button "Idle CEO" [ref=e189] [cursor=pointer]:
+              - generic [ref=e190]:
+                - generic:
+                  - generic: Idle
+                  - generic: CEO
+            - button "Idle CTO" [ref=e192] [cursor=pointer]:
+              - generic [ref=e193]:
+                - generic:
+                  - generic: Idle
+                  - generic: CTO
+          - paragraph [ref=e195]:
+            - text: Click a character to talk · Inspired by
+            - link "Pixel Agents" [ref=e196] [cursor=pointer]:
+              - /url: https://github.com/pablodelucca/coderon-pixel-agents
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e205]:
+                - generic [ref=e206]: CTO
+                - generic [ref=e207]: CTO · Chief Technology Officer
+              - button "Close" [ref=e208]:
+                - img [ref=e209]
+            - generic [ref=e212]:
+              - button "잡담 / Chat" [ref=e213]:
+                - img [ref=e214]
+                - generic [ref=e217]: 잡담
+                - generic [ref=e218]: / Chat
+              - button "이슈 / Create issue" [ref=e219]:
+                - img [ref=e220]
+                - generic [ref=e223]: 이슈
+                - generic [ref=e224]: / Create issue
+            - generic [ref=e225]:
+              - generic [ref=e226]:
+                - generic [ref=e230]: 안녕하세요! 저는 CTO이에요. 무엇이든 물어보세요. 직위 / 보스 / 팀원 / 지금 하는 일 같은 걸 답해드릴 수 있어요.
+                - generic [ref=e238]: 보스가 누구예요?
+                - generic [ref=e242]: 제 보스는 CEO이에요.
+                - generic [ref=e244]: 직책이 뭐예요?
+                - generic [ref=e248]: 직책은 "Chief Technology Officer"이고, 역할은 CTO이에요.
+              - generic [ref=e231]:
+                - textbox "CTO에게 잡담을 걸어보세요…" [active] [ref=e232]
+                - button "Send" [disabled] [ref=e233]:
+                  - img [ref=e234]
+  - generic [ref=e197]:
+    - heading "Command Palette" [level=2] [ref=e198]
+    - paragraph [ref=e199]: Search for a command to run...

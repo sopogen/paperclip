@@ -1,0 +1,216 @@
+- generic:
+  - generic:
+    - generic:
+      - link:
+        - /url: "#main-content"
+        - text: Skip to Main Content
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - img
+              - generic:
+                - button:
+                  - link:
+                    - /url: /JH/dashboard
+                    - generic:
+                      - generic:
+                        - img
+                        - generic: J
+                - status
+              - generic:
+                - button:
+                  - img
+            - generic:
+              - complementary:
+                - generic:
+                  - button:
+                    - generic:
+                      - generic: JH
+                    - img
+                  - button:
+                    - img
+                - navigation:
+                  - generic:
+                    - button:
+                      - img
+                      - generic: New Issue
+                    - link:
+                      - /url: /JH/dashboard
+                      - generic:
+                        - img
+                      - generic: Dashboard
+                    - link:
+                      - /url: /JH/inbox
+                      - generic:
+                        - img
+                      - generic: Inbox
+                      - generic: "2"
+                  - generic:
+                    - generic: Work
+                    - generic:
+                      - link:
+                        - /url: /JH/issues
+                        - generic:
+                          - img
+                        - generic: Issues
+                      - link:
+                        - /url: /JH/routines
+                        - generic:
+                          - img
+                        - generic: Routines
+                      - link:
+                        - /url: /JH/goals
+                        - generic:
+                          - img
+                        - generic: Goals
+                  - generic:
+                    - generic:
+                      - generic:
+                        - button [expanded]:
+                          - img
+                          - generic: Projects
+                        - button:
+                          - img
+                    - generic:
+                      - generic:
+                        - button:
+                          - generic:
+                            - link:
+                              - /url: /JH/projects/onboarding/issues
+                              - generic: Onboarding
+                      - status
+                  - generic:
+                    - generic:
+                      - generic:
+                        - button [expanded]:
+                          - img
+                          - generic: Agents
+                        - button:
+                          - img
+                    - generic:
+                      - generic:
+                        - link:
+                          - /url: /JH/agents/pixel
+                          - img
+                          - generic: The Office
+                        - link:
+                          - /url: /JH/agents/ceo
+                          - img
+                          - generic: CEO
+                        - link:
+                          - /url: /JH/agents/cto
+                          - img
+                          - generic: CTO
+                  - generic:
+                    - generic: Company
+                    - generic:
+                      - link:
+                        - /url: /JH/org
+                        - generic:
+                          - img
+                        - generic: Org
+                      - link:
+                        - /url: /JH/skills
+                        - generic:
+                          - img
+                        - generic: Skills
+                      - link:
+                        - /url: /JH/costs
+                        - generic:
+                          - img
+                        - generic: Costs
+                      - link:
+                        - /url: /JH/activity
+                        - generic:
+                          - img
+                        - generic: Activity
+                      - link:
+                        - /url: /JH/company/settings
+                        - generic:
+                          - img
+                        - generic: Settings
+          - generic:
+            - button:
+              - generic:
+                - generic: BO
+              - generic: Board
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: The Office
+          - generic:
+            - main:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - heading [level=1]: The Office
+                  - generic:
+                    - button: 0 active
+                    - button: 2 idle
+                - generic:
+                  - button:
+                    - generic:
+                      - generic:
+                        - generic: Idle
+                        - generic: CEO
+                  - button:
+                    - generic:
+                      - generic:
+                        - generic: Idle
+                        - generic: CTO
+                - paragraph:
+                  - text: Click a character to talk · Inspired by
+                  - link:
+                    - /url: https://github.com/pablodelucca/pixel-agents
+                    - text: Pixel Agents
+      - generic:
+        - heading [level=2]: Command Palette
+        - paragraph: Search for a command to run...
+  - dialog [ref=e233]:
+    - generic [ref=e234]:
+      - generic [ref=e235]:
+        - button "JH" [ref=e236] [cursor=pointer]
+        - generic [ref=e237]: ›
+        - generic [ref=e238]: New issue
+      - generic [ref=e239]:
+        - button [ref=e240]:
+          - img
+        - button "×" [ref=e241]:
+          - generic [ref=e242]: ×
+    - generic [ref=e243]:
+      - textbox "Issue title" [active] [ref=e245]: Hey CEO, what should we focus on this week?
+      - generic [ref=e248]:
+        - generic [ref=e249]: For
+        - button "CEO" [ref=e250]:
+          - img [ref=e251]
+          - generic [ref=e254]: CEO
+        - generic [ref=e255]: in
+        - button "Project" [ref=e256]:
+          - generic [ref=e257]: Project
+        - button "Add reviewer or approver" [ref=e258]:
+          - img [ref=e259]
+      - button "Claude options" [ref=e264]:
+        - img [ref=e265]
+        - text: Claude options
+      - textbox "editable markdown" [ref=e273]:
+        - paragraph [ref=e274]: Hey CEO, what should we focus on this week?
+    - generic [ref=e275]:
+      - button "Todo" [ref=e276]:
+        - img [ref=e277]
+        - text: Todo
+      - button "Priority" [ref=e280]:
+        - img [ref=e281]
+        - text: Priority
+      - button "Upload" [ref=e282]:
+        - img [ref=e283]
+        - text: Upload
+      - button [ref=e285]:
+        - img [ref=e286]
+    - generic [ref=e290]:
+      - button "Discard Draft" [ref=e291]
+      - button "Create Issue" [ref=e293]:
+        - generic [ref=e295]: Create Issue

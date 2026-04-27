@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight, Plus, Gamepad2 } from "lucide-react";
 import { useCompany } from "../context/CompanyContext";
 import { useDialog } from "../context/DialogContext";
 import { useSidebar } from "../context/SidebarContext";
@@ -100,6 +100,24 @@ export function SidebarAgents() {
 
       <CollapsibleContent>
         <div className="flex flex-col gap-0.5 mt-0.5">
+          <NavLink
+            to="/agents/pixel"
+            state={SIDEBAR_SCROLL_RESET_STATE}
+            onClick={() => {
+              if (isMobile) setSidebarOpen(false);
+            }}
+            className={({ isActive }: { isActive: boolean }) =>
+              cn(
+                "flex items-center gap-2.5 px-3 py-1.5 text-[13px] font-medium transition-colors",
+                isActive
+                  ? "bg-accent text-foreground"
+                  : "text-foreground/80 hover:bg-accent/50 hover:text-foreground"
+              )
+            }
+          >
+            <Gamepad2 className="shrink-0 h-3.5 w-3.5 text-muted-foreground" />
+            <span className="flex-1 truncate">The Office</span>
+          </NavLink>
           {orderedAgents.map((agent: Agent) => {
             const runCount = liveCountByAgent.get(agent.id) ?? 0;
             return (

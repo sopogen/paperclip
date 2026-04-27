@@ -1,0 +1,141 @@
+- generic [ref=e3]:
+  - link "Skip to Main Content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img [ref=e10]
+          - generic [ref=e12]:
+            - button "J" [ref=e13]:
+              - link "J" [ref=e14] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - generic [ref=e17]:
+                  - img [ref=e18]
+                  - generic [ref=e19]: J
+            - status [ref=e20]
+          - button "Add company" [ref=e23]:
+            - img [ref=e24]
+        - complementary [ref=e26]:
+          - generic [ref=e27]:
+            - button "Open JH menu" [ref=e28]:
+              - generic [ref=e30]: JH
+              - img
+            - button [ref=e31]:
+              - img
+          - navigation [ref=e32]:
+            - generic [ref=e33]:
+              - button "New Issue" [ref=e34]:
+                - img [ref=e35]
+                - generic [ref=e38]: New Issue
+              - link "Dashboard" [ref=e211] [cursor=pointer]:
+                - /url: /JH/dashboard
+                - img [ref=e41]
+                - generic [ref=e46]: Dashboard
+              - link "Inbox 2" [ref=e52] [cursor=pointer]:
+                - /url: /JH/inbox
+                - img [ref=e54]
+                - generic [ref=e57]: Inbox
+                - generic [ref=e58]: "2"
+            - generic [ref=e59]:
+              - generic [ref=e60]: Work
+              - generic [ref=e61]:
+                - link "Issues" [ref=e62] [cursor=pointer]:
+                  - /url: /JH/issues
+                  - img [ref=e64]
+                  - generic [ref=e67]: Issues
+                - link "Routines" [ref=e68] [cursor=pointer]:
+                  - /url: /JH/routines
+                  - img [ref=e70]
+                  - generic [ref=e75]: Routines
+                - link "Goals" [ref=e76] [cursor=pointer]:
+                  - /url: /JH/goals
+                  - img [ref=e78]
+                  - generic [ref=e82]: Goals
+            - generic [ref=e83]:
+              - generic [ref=e85]:
+                - button "Projects" [expanded] [ref=e86]:
+                  - img [ref=e87]
+                  - generic [ref=e89]: Projects
+                - button "New project" [ref=e90]:
+                  - img [ref=e91]
+              - generic [ref=e92]:
+                - button "Onboarding" [ref=e94]:
+                  - link "Onboarding" [ref=e96] [cursor=pointer]:
+                    - /url: /JH/projects/onboarding/issues
+                    - generic [ref=e98]: Onboarding
+                - status [ref=e99]
+            - generic [ref=e100]:
+              - generic [ref=e102]:
+                - button "Agents" [expanded] [ref=e103]:
+                  - img [ref=e104]
+                  - generic [ref=e106]: Agents
+                - button "New agent" [ref=e107]:
+                  - img [ref=e108]
+              - generic [ref=e110]:
+                - link "Pixel Office" [ref=e111] [cursor=pointer]:
+                  - /url: /JH/agents/pixel
+                  - img [ref=e112]
+                  - generic [ref=e114]: Pixel Office
+                - link "CEO" [ref=e115] [cursor=pointer]:
+                  - /url: /JH/agents/ceo
+                  - img [ref=e116]
+                  - generic [ref=e119]: CEO
+                - link "CTO" [ref=e212] [cursor=pointer]:
+                  - /url: /JH/agents/cto
+                  - img [ref=e121]
+                  - generic [ref=e123]: CTO
+            - generic [ref=e129]:
+              - generic [ref=e130]: Company
+              - generic [ref=e131]:
+                - link "Org" [ref=e132] [cursor=pointer]:
+                  - /url: /JH/org
+                  - img [ref=e134]
+                  - generic [ref=e139]: Org
+                - link "Skills" [ref=e140] [cursor=pointer]:
+                  - /url: /JH/skills
+                  - img [ref=e142]
+                  - generic [ref=e152]: Skills
+                - link "Costs" [ref=e153] [cursor=pointer]:
+                  - /url: /JH/costs
+                  - img [ref=e155]
+                  - generic [ref=e157]: Costs
+                - link "Activity" [ref=e158] [cursor=pointer]:
+                  - /url: /JH/activity
+                  - img [ref=e160]
+                  - generic [ref=e164]: Activity
+                - link "Settings" [ref=e165] [cursor=pointer]:
+                  - /url: /JH/company/settings
+                  - img [ref=e167]
+                  - generic [ref=e170]: Settings
+      - button "Open account menu" [ref=e172]:
+        - generic [ref=e174]: BO
+        - generic [ref=e175]: Board
+    - generic [ref=e176]:
+      - heading "Pixel Office" [level=1] [ref=e580]
+      - main [active] [ref=e182]:
+        - generic [ref=e581]:
+          - generic [ref=e582]:
+            - generic [ref=e583]:
+              - img [ref=e584]
+              - heading "Pixel Office" [level=1] [ref=e586]
+              - generic [ref=e587]: 2 agents
+            - generic [ref=e588] [cursor=pointer]:
+              - checkbox "Show terminated" [ref=e589]
+              - text: Show terminated
+          - generic [ref=e591]:
+            - button "... CEO" [ref=e592] [cursor=pointer]:
+              - generic [ref=e593]:
+                - generic [ref=e594]: ...
+                - generic [ref=e597]: CEO
+            - button "... CTO" [ref=e598] [cursor=pointer]:
+              - generic [ref=e599]:
+                - generic [ref=e600]: ...
+                - generic [ref=e603]: CTO
+          - paragraph [ref=e604]:
+            - text: Click a character to open the agent · Inspired by
+            - link "Pixel Agents" [ref=e605] [cursor=pointer]:
+              - /url: https://github.com/pablodelucca/pixel-agents
+  - generic [ref=e208]:
+    - heading "Command Palette" [level=2] [ref=e209]
+    - paragraph [ref=e210]: Search for a command to run...
