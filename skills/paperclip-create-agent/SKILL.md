@@ -10,6 +10,22 @@ description: >
 
 Use this skill when you are asked to hire/create an agent.
 
+## Language for human-readable fields
+
+If your own agent instructions specify a non-English language for human-facing
+content (e.g. a Korean directive in your AGENTS.md), the same rule applies to
+the human-readable fields of the new agent you are creating:
+
+- `title` (e.g. "기술 총괄 / Chief Technology Officer")
+- `capabilities` — write in the company language. The example texts in
+  `references/agents/*.md` and below are English defaults; translate them when
+  hiring into a non-English company.
+- The new agent's own `AGENTS.md` should include the same Language section so
+  *its* outputs (issues, comments, interactions) follow the company language.
+
+Identifiers stay English: `name` (used as a slug), `role` (enum), `icon` name,
+adapter ids, JSON keys, instruction file names.
+
 ## Preconditions
 
 You need either:
