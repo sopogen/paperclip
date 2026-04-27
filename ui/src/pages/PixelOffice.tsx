@@ -14,6 +14,15 @@ import {
   PixelOfficeRenderer,
   getWalkableBounds,
   getOptionalRoomBounds,
+  PC_SEATS,
+  REST_SEATS,
+  FRAME_WIDTH,
+  FRAME_HEIGHT,
+  SPRITE_SCALE,
+  RENDERED_W,
+  RENDERED_H,
+  type Seat,
+  type SeatDirection,
 } from "../components/PixelOfficeRenderer";
 import { PixelChatPanel } from "../components/PixelChatPanel";
 import { agentUrl, cn } from "../lib/utils";
@@ -22,22 +31,55 @@ import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
 
 const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
 
-const CHARACTER_COUNT = 6;
-const FRAME_WIDTH = 16;
-const FRAME_HEIGHT = 32;
 const SHEET_COLS = 7;
 const SHEET_ROWS = 3;
-const SCALE = 2;
-const RENDERED_W = FRAME_WIDTH * SCALE;
-const RENDERED_H = FRAME_HEIGHT * SCALE;
 
 const SPEED = 50; // px per second
-const FRAME_INTERVAL_MS = 160; // sprite frame change interval
+const FRAME_INTERVAL_MS = 160; // walk frame change interval
 const MIN_IDLE_MS = 1500;
 const MAX_IDLE_MS = 4500;
-const VISIT_OTHER_ROOM_PROB = 0.15; // chance to walk into meeting/lounge
+const VISIT_OTHER_ROOM_PROB = 0.18; // chance to walk into meeting/lounge while wandering
+const SIT_ON_REST_PROB = 0.45; // chance an idle agent decides to sit instead of wander
+const REST_SIT_MIN_MS = 6000;
+const REST_SIT_MAX_MS = 16000;
 
-type Direction = "down" | "up" | "right" | "left";
+// 10 distinct visual avatar variants: 6 base sprite sheets + 4 hue-rotated recolors.
+interface AvatarDef {
+  base: number;
+  filter: string;
+}
+const AVATAR_DEFS: AvatarDef[] = [
+  { base: 0, filter: "" },
+  { base: 1, filter: "" },
+  { base: 2, filter: "" },
+  { base: 3, filter: "" },
+  { base: 4, filter: "" },
+  { base: 5, filter: "" },
+  { base: 0, filter: "hue-rotate(140deg) saturate(1.2)" },
+  { base: 1, filter: "hue-rotate(220deg) saturate(1.3)" },
+  { base: 3, filter: "hue-rotate(80deg) saturate(1.5) brightness(0.95)" },
+  { base: 4, filter: "hue-rotate(300deg) saturate(1.4)" },
+];
+const AVATAR_COUNT = AVATAR_DEFS.length;
+
+function buildAvatarMap(allAgents: Agent[]): Map<string, number> {
+  // Sort by id so assignments stay stable across renders, then assign avatars round-robin.
+  // Within a company this gives every agent a unique avatar until the count exceeds AVATAR_COUNT.
+  const sorted = [...allAgents]
+    .filter((a) => a.status !== "terminated")
+    .sort((a, b) => a.id.localeCompare(b.id));
+  const map = new Map<string, number>();
+  sorted.forEach((agent, idx) => {
+    map.set(agent.id, idx % AVATAR_COUNT);
+  });
+  return map;
+}
+
+const SEATS_BY_ID: Map<string, Seat> = new Map(
+  [...PC_SEATS, ...REST_SEATS].map((s) => [s.id, s]),
+);
+
+type Direction = SeatDirection;
 
 interface AgentSim {
   x: number;
@@ -49,17 +91,12 @@ interface AgentSim {
   walkFrame: number;
   nextFrameAt: number;
   resumeAt: number;
-  charIdx: number;
-  visualEl: HTMLDivElement | null;
+  avatarIdx: number;
+  visualEl: HTMLElement | null;
   spriteEl: HTMLDivElement | null;
-}
-
-function characterIndexFor(id: string): number {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = (hash * 31 + id.charCodeAt(i)) | 0;
-  }
-  return Math.abs(hash) % CHARACTER_COUNT;
+  agentStatus: "active" | "idle";
+  seatId: string | null; // currently sitting in this seat
+  intendedSeatId: string | null; // walking toward this seat
 }
 
 function statusLabel(agent: Agent): string {
@@ -124,9 +161,24 @@ function applyVisual(sim: AgentSim) {
   if (sim.spriteEl) {
     const row = spriteRow(sim.direction);
     const col = sim.walking ? sim.walkFrame % 4 : 0;
-    sim.spriteEl.style.backgroundPosition = `-${col * FRAME_WIDTH * SCALE}px -${row * FRAME_HEIGHT * SCALE}px`;
+    sim.spriteEl.style.backgroundPosition = `-${col * FRAME_WIDTH * SPRITE_SCALE}px -${row * FRAME_HEIGHT * SPRITE_SCALE}px`;
     sim.spriteEl.style.transform = sim.direction === "left" ? "scaleX(-1)" : "scaleX(1)";
   }
+}
+
+function findFreeSeat(seats: Seat[], agentId: string, occupancy: Map<string, string>): Seat | null {
+  // Random scan so agents spread across available seats.
+  const order = Array.from({ length: seats.length }, (_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  for (const i of order) {
+    const s = seats[i];
+    const holder = occupancy.get(s.id);
+    if (!holder || holder === agentId) return s;
+  }
+  return null;
 }
 
 interface TalkModalState {
@@ -135,17 +187,19 @@ interface TalkModalState {
 
 type TalkMode = "chat" | "issue";
 
-function AgentSpriteAvatar({ agent, size = 1.5 }: { agent: Agent; size?: number }) {
+function AgentSpriteAvatar({ avatarIdx, size = 1.5 }: { avatarIdx: number; size?: number }) {
+  const def = AVATAR_DEFS[avatarIdx % AVATAR_COUNT];
   return (
     <div
       style={{
         width: FRAME_WIDTH * size,
         height: FRAME_HEIGHT * size,
-        backgroundImage: `url(/pixel-office/characters/char_${characterIndexFor(agent.id)}.png)`,
+        backgroundImage: `url(/pixel-office/characters/char_${def.base}.png)`,
         backgroundPosition: "0 0",
         backgroundSize: `${FRAME_WIDTH * SHEET_COLS * size}px ${FRAME_HEIGHT * SHEET_ROWS * size}px`,
         backgroundRepeat: "no-repeat",
         imageRendering: "pixelated",
+        filter: def.filter || undefined,
       }}
     />
   );
@@ -153,11 +207,13 @@ function AgentSpriteAvatar({ agent, size = 1.5 }: { agent: Agent; size?: number 
 
 function TalkModal({
   state,
+  avatarIdx,
   onClose,
   onTalk,
   onView,
 }: {
   state: TalkModalState;
+  avatarIdx: number;
   onClose: () => void;
   onTalk: (message: string) => void;
   onView: () => void;
@@ -194,7 +250,7 @@ function TalkModal({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-2 bg-neutral-900 text-white border-b-2 border-neutral-800">
           <div className="flex items-center gap-2">
-            <AgentSpriteAvatar agent={agent} size={2} />
+            <AgentSpriteAvatar avatarIdx={avatarIdx} size={2} />
             <div>
               <div className="font-mono text-sm font-semibold">{agent.name}</div>
               <div className="text-[11px] text-neutral-400 font-mono">
@@ -237,7 +293,7 @@ function TalkModal({
         {mode === "chat" ? (
           <PixelChatPanel
             agent={agent}
-            agentAvatar={<AgentSpriteAvatar agent={agent} size={1} />}
+            agentAvatar={<AgentSpriteAvatar avatarIdx={avatarIdx} size={1} />}
           />
         ) : (
           <form onSubmit={handleIssueSubmit} className="p-4 space-y-3">
@@ -328,7 +384,9 @@ export function PixelOffice() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<FilterTab>("all");
   const [talkAgent, setTalkAgent] = useState<Agent | null>(null);
+  const [occupiedPcSeats, setOccupiedPcSeats] = useState<Set<string>>(new Set());
   const simsRef = useRef<Map<string, AgentSim>>(new Map());
+  const seatOccupancyRef = useRef<Map<string, string>>(new Map()); // seatId -> agentId
   const rafRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
 
@@ -357,6 +415,10 @@ export function PixelOffice() {
     setBreadcrumbs([{ label: "The Office" }]);
   }, [setBreadcrumbs]);
 
+  // Stable per-company avatar assignment — uses the full agent list (not just visible)
+  // so that toggling filters does not reshuffle assigned avatars.
+  const avatarMap = useMemo(() => buildAvatarMap(agents ?? []), [agents]);
+
   const visibleAgents = useMemo(() => {
     return (agents ?? [])
       .filter((a) => a.status !== "terminated")
@@ -375,19 +437,29 @@ export function PixelOffice() {
     return { total: all.length, active, idle };
   }, [agents, liveAgentIds]);
 
-  // Initialize / sync agent simulation state when visible agents change
+  // Initialize / sync agent simulation state when visible agents (or their statuses) change
   useEffect(() => {
     const sims = simsRef.current;
+    const occupancy = seatOccupancyRef.current;
     const currentIds = new Set(visibleAgents.map((a) => a.id));
 
-    // Drop sims for agents no longer visible
+    // Drop sims for agents no longer visible — release any seats they hold.
     for (const id of Array.from(sims.keys())) {
-      if (!currentIds.has(id)) sims.delete(id);
+      if (!currentIds.has(id)) {
+        const sim = sims.get(id)!;
+        if (sim.seatId && occupancy.get(sim.seatId) === id) occupancy.delete(sim.seatId);
+        if (sim.intendedSeatId && occupancy.get(sim.intendedSeatId) === id) occupancy.delete(sim.intendedSeatId);
+        sims.delete(id);
+      }
     }
 
-    // Add sims for new agents
+    // Add or update sims
     visibleAgents.forEach((agent, idx) => {
-      if (!sims.has(agent.id)) {
+      const newStatus: "active" | "idle" =
+        isActiveStatus(agent.status) || liveAgentIds.has(agent.id) ? "active" : "idle";
+      const avatarIdx = avatarMap.get(agent.id) ?? 0;
+      const existing = sims.get(agent.id);
+      if (!existing) {
         const start = deterministicStart(idx, visibleAgents.length);
         sims.set(agent.id, {
           x: start.x,
@@ -398,14 +470,34 @@ export function PixelOffice() {
           walking: false,
           walkFrame: 0,
           nextFrameAt: 0,
-          resumeAt: performance.now() + Math.random() * 2000,
-          charIdx: characterIndexFor(agent.id),
+          resumeAt: performance.now() + Math.random() * 1500,
+          avatarIdx,
           visualEl: null,
           spriteEl: null,
+          agentStatus: newStatus,
+          seatId: null,
+          intendedSeatId: null,
         });
+      } else {
+        existing.avatarIdx = avatarIdx;
+        if (existing.agentStatus !== newStatus) {
+          existing.agentStatus = newStatus;
+          // Force re-evaluation of next action: release any held/intended seat.
+          if (existing.seatId && occupancy.get(existing.seatId) === agent.id) {
+            occupancy.delete(existing.seatId);
+          }
+          existing.seatId = null;
+          if (existing.intendedSeatId && occupancy.get(existing.intendedSeatId) === agent.id) {
+            occupancy.delete(existing.intendedSeatId);
+          }
+          existing.intendedSeatId = null;
+          existing.walking = false;
+          existing.walkFrame = 0;
+          existing.resumeAt = performance.now() + 100 + Math.random() * 400;
+        }
       }
     });
-  }, [visibleAgents]);
+  }, [visibleAgents, liveAgentIds, avatarMap]);
 
   // Animation loop
   useEffect(() => {
@@ -413,12 +505,36 @@ export function PixelOffice() {
       const dt = lastTickRef.current ? (now - lastTickRef.current) / 1000 : 0;
       lastTickRef.current = now;
 
-      for (const sim of simsRef.current.values()) {
+      const occupancy = seatOccupancyRef.current;
+
+      for (const [agentId, sim] of simsRef.current) {
         if (!sim.walking) {
           if (now >= sim.resumeAt) {
-            const target = pickRandomTarget();
-            sim.targetX = target.x;
-            sim.targetY = target.y;
+            // If currently sitting, release seat before deciding next action.
+            if (sim.seatId) {
+              if (occupancy.get(sim.seatId) === agentId) occupancy.delete(sim.seatId);
+              sim.seatId = null;
+            }
+
+            let chosen: Seat | null = null;
+            if (sim.agentStatus === "active") {
+              chosen = findFreeSeat(PC_SEATS, agentId, occupancy);
+            } else if (Math.random() < SIT_ON_REST_PROB) {
+              chosen = findFreeSeat(REST_SEATS, agentId, occupancy);
+            }
+
+            if (chosen) {
+              occupancy.set(chosen.id, agentId);
+              sim.intendedSeatId = chosen.id;
+              sim.targetX = chosen.spriteX;
+              sim.targetY = chosen.spriteY;
+            } else {
+              // Wander
+              sim.intendedSeatId = null;
+              const target = pickRandomTarget();
+              sim.targetX = target.x;
+              sim.targetY = target.y;
+            }
             sim.walking = true;
             sim.nextFrameAt = now + FRAME_INTERVAL_MS;
           }
@@ -431,7 +547,21 @@ export function PixelOffice() {
             sim.y = sim.targetY;
             sim.walking = false;
             sim.walkFrame = 0;
-            sim.resumeAt = now + MIN_IDLE_MS + Math.random() * (MAX_IDLE_MS - MIN_IDLE_MS);
+            if (sim.intendedSeatId) {
+              const seat = SEATS_BY_ID.get(sim.intendedSeatId);
+              sim.seatId = sim.intendedSeatId;
+              sim.intendedSeatId = null;
+              if (seat) sim.direction = seat.direction;
+              // Active agents at PC stay until their status changes; idle agents on
+              // sofa/chair stay for a random window then choose again.
+              if (sim.agentStatus === "active") {
+                sim.resumeAt = Number.MAX_SAFE_INTEGER;
+              } else {
+                sim.resumeAt = now + REST_SIT_MIN_MS + Math.random() * (REST_SIT_MAX_MS - REST_SIT_MIN_MS);
+              }
+            } else {
+              sim.resumeAt = now + MIN_IDLE_MS + Math.random() * (MAX_IDLE_MS - MIN_IDLE_MS);
+            }
           } else {
             const step = SPEED * dt;
             const nx = (dx / dist) * Math.min(step, dist);
@@ -455,6 +585,31 @@ export function PixelOffice() {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       lastTickRef.current = 0;
     };
+  }, []);
+
+  // Poll seat occupancy ref for PC seats so the renderer can flip PCs to ON.
+  // Polling avoids re-rendering on every animation frame.
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const next = new Set<string>();
+      for (const seatId of seatOccupancyRef.current.keys()) {
+        if (seatId.startsWith("pc-seat-")) next.add(seatId);
+      }
+      setOccupiedPcSeats((prev) => {
+        if (prev.size === next.size) {
+          let same = true;
+          for (const v of prev) {
+            if (!next.has(v)) {
+              same = false;
+              break;
+            }
+          }
+          if (same) return prev;
+        }
+        return next;
+      });
+    }, 500);
+    return () => window.clearInterval(id);
   }, []);
 
   const handleTalk = (message: string) => {
@@ -483,7 +638,7 @@ export function PixelOffice() {
           width: ${RENDERED_W}px;
           height: ${RENDERED_H}px;
           background-repeat: no-repeat;
-          background-size: ${FRAME_WIDTH * SHEET_COLS * SCALE}px ${FRAME_HEIGHT * SHEET_ROWS * SCALE}px;
+          background-size: ${FRAME_WIDTH * SHEET_COLS * SPRITE_SCALE}px ${FRAME_HEIGHT * SHEET_ROWS * SPRITE_SCALE}px;
           image-rendering: pixelated;
           transform-origin: center;
         }
@@ -519,11 +674,22 @@ export function PixelOffice() {
       )}
 
       {visibleAgents.length > 0 && (
-        <PixelOfficeRenderer>
+        <PixelOfficeRenderer occupiedPcSeatIds={occupiedPcSeats}>
           {visibleAgents.map((agent) => {
             const isLive = liveAgentIds.has(agent.id);
-            const charIdx = characterIndexFor(agent.id);
+            const avatarIdx = avatarMap.get(agent.id) ?? 0;
+            const def = AVATAR_DEFS[avatarIdx % AVATAR_COUNT];
             const status = statusLabel(agent);
+            const spriteFilter = [
+              def.filter,
+              isLive
+                ? "drop-shadow(0 0 5px rgb(34 211 238 / 0.85))"
+                : agent.status === "error"
+                  ? "drop-shadow(0 0 5px rgb(248 113 113 / 0.7))"
+                  : "drop-shadow(0 1px 0 rgb(0 0 0 / 0.6))",
+            ]
+              .filter(Boolean)
+              .join(" ");
             return (
               <button
                 key={agent.id}
@@ -553,12 +719,8 @@ export function PixelOffice() {
                   <div
                     className="pixel-character"
                     style={{
-                      backgroundImage: `url(/pixel-office/characters/char_${charIdx}.png)`,
-                      filter: isLive
-                        ? "drop-shadow(0 0 5px rgb(34 211 238 / 0.85))"
-                        : agent.status === "error"
-                          ? "drop-shadow(0 0 5px rgb(248 113 113 / 0.7))"
-                          : "drop-shadow(0 1px 0 rgb(0 0 0 / 0.6))",
+                      backgroundImage: `url(/pixel-office/characters/char_${def.base}.png)`,
+                      filter: spriteFilter,
                     }}
                     ref={(el) => {
                       const sim = simsRef.current.get(agent.id);
@@ -593,6 +755,7 @@ export function PixelOffice() {
       {talkAgent && (
         <TalkModal
           state={{ agent: talkAgent }}
+          avatarIdx={avatarMap.get(talkAgent.id) ?? 0}
           onClose={() => setTalkAgent(null)}
           onTalk={handleTalk}
           onView={() => {

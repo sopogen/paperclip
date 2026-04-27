@@ -1,86 +1,240 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const TILE = 24;
 
+// Sprite frame metadata for character sheets — exported so PixelOffice can position seated agents.
+export const FRAME_WIDTH = 16;
+export const FRAME_HEIGHT = 32;
+export const SPRITE_SCALE = 2;
+export const RENDERED_W = FRAME_WIDTH * SPRITE_SCALE;
+export const RENDERED_H = FRAME_HEIGHT * SPRITE_SCALE;
+
 // Office grid in tiles
-export const COLS = 28;
-export const ROWS = 19;
+export const COLS = 36;
+export const ROWS = 22;
 
 export const ROOM_WIDTH = COLS * TILE;
 export const ROOM_HEIGHT = ROWS * TILE;
 
-// Room rectangles in tile coordinates [x, y, w, h] (inclusive interior)
-const MAIN_ROOM = { x: 1, y: 1, w: 17, h: 17 } as const; // wood-floor work area
-const MEETING_ROOM = { x: 19, y: 1, w: 8, h: 7 } as const; // beige conference area
-const LOUNGE_ROOM = { x: 19, y: 9, w: 8, h: 9 } as const; // blue lounge
+// Room rectangles in tile coordinates
+const MAIN_ROOM = { x: 1, y: 1, w: 22, h: 20 } as const; // wood-floor work area
+const MEETING_ROOM = { x: 24, y: 1, w: 11, h: 10 } as const; // beige conference area
+const LOUNGE_ROOM = { x: 24, y: 12, w: 11, h: 9 } as const; // blue lounge
+
+export type SeatDirection = "down" | "up" | "right" | "left";
+
+export interface Seat {
+  id: string;
+  type: "pc" | "sofa" | "chair";
+  /** Pixel x for the character sprite's top-left when sitting in this seat. */
+  spriteX: number;
+  /** Pixel y for the character sprite's top-left when sitting in this seat. */
+  spriteY: number;
+  direction: SeatDirection;
+}
+
+interface DeskGroup {
+  deskCol: number;
+  deskRow: number;
+  pcCol: number;
+  pcRow: number;
+  seatCol: number;
+  seatRow: number;
+  pcId: string;
+}
+
+const DESK_GROUPS: DeskGroup[] = (() => {
+  const groups: DeskGroup[] = [];
+  // Desk and PC share the same top row so the PC visibly rests on top of the desk
+  // (their sprites overlap in the middle column).
+  const deskRows = [2, 7, 12, 17];
+  const deskCols = [3, 9, 15];
+  let i = 0;
+  for (const dy of deskRows) {
+    for (const dx of deskCols) {
+      groups.push({
+        deskCol: dx,
+        deskRow: dy,
+        pcCol: dx + 1,
+        pcRow: dy,
+        seatCol: dx + 1,
+        seatRow: dy + 2,
+        pcId: `pc-${i++}`,
+      });
+    }
+  }
+  return groups;
+})();
+
+interface SofaInfo {
+  col: number;
+  row: number;
+}
+
+const SOFAS: SofaInfo[] = [
+  { col: 26, row: 14 },
+  { col: 31, row: 14 },
+];
+
+interface ChairInfo {
+  col: number;
+  row: number;
+  /** Where the chair lives — used only for layout; seat direction is always front. */
+  area: "meeting" | "lounge";
+}
+
+const CHAIRS: ChairInfo[] = [
+  // Meeting room — 4 chairs in a row (used for chats/discussions)
+  { col: 26, row: 4, area: "meeting" },
+  { col: 28, row: 4, area: "meeting" },
+  { col: 30, row: 4, area: "meeting" },
+  { col: 32, row: 4, area: "meeting" },
+  // Lounge — flanking chairs
+  { col: 26, row: 18, area: "lounge" },
+  { col: 32, row: 18, area: "lounge" },
+];
+
+/**
+ * For a "front-facing" seat (character sits on/at the tile facing the camera),
+ * we anchor the sprite so its bottom rests at the bottom of the tile and it's
+ * centered horizontally. The 32px-wide sprite is wider than a 24px tile, so we
+ * shift left by 4px.
+ */
+function frontSeatAnchor(tileCol: number, tileRow: number) {
+  return {
+    spriteX: tileCol * TILE + (TILE - RENDERED_W) / 2,
+    spriteY: (tileRow + 1) * TILE - RENDERED_H,
+  };
+}
+
+/**
+ * For a PC seat, the character sits in front of the desk facing up (toward the PC).
+ * We pull the sprite up by 16px so its head overlaps the desk's bottom edge — making
+ * the character look like it's sitting *at* the desk rather than parked below it.
+ */
+function pcSeatAnchor(seatCol: number, seatRow: number) {
+  return {
+    spriteX: seatCol * TILE + (TILE - RENDERED_W) / 2,
+    spriteY: seatRow * TILE - 16,
+  };
+}
+
+export const PC_SEATS: Seat[] = DESK_GROUPS.map((g) => {
+  const a = pcSeatAnchor(g.seatCol, g.seatRow);
+  return {
+    id: `pc-seat-${g.pcId}`,
+    type: "pc",
+    spriteX: a.spriteX,
+    spriteY: a.spriteY,
+    direction: "up",
+  };
+});
+
+/** PC tile id paired with the seat that fronts it (so we can flip PC sprites when occupied). */
+export const PC_SEAT_PC_IDS: Map<string, string> = new Map(
+  DESK_GROUPS.map((g) => [`pc-seat-${g.pcId}`, g.pcId]),
+);
+
+export const SOFA_SEATS: Seat[] = SOFAS.flatMap((s, i) => [
+  {
+    id: `sofa-${i}-l`,
+    type: "sofa" as const,
+    ...frontSeatAnchor(s.col, s.row),
+    direction: "down" as const,
+  },
+  {
+    id: `sofa-${i}-r`,
+    type: "sofa" as const,
+    ...frontSeatAnchor(s.col + 1, s.row),
+    direction: "down" as const,
+  },
+]);
+
+export const CHAIR_SEATS: Seat[] = CHAIRS.map((c, i) => ({
+  id: `chair-${i}`,
+  type: "chair" as const,
+  ...frontSeatAnchor(c.col, c.row),
+  direction: "down" as const,
+}));
+
+export const REST_SEATS: Seat[] = [...SOFA_SEATS, ...CHAIR_SEATS];
 
 interface Furniture {
   type: string;
   file: string;
-  x: number; // tile col (top-left)
-  y: number; // tile row (top-left)
+  x: number;
+  y: number;
   tilesW: number;
   tilesH: number;
 }
 
-// Build a deterministic furniture layout
-function buildFurniture(): Furniture[] {
+function buildStaticFurniture(): Furniture[] {
   const items: Furniture[] = [];
 
-  // 3 rows × 3 desk groups in main work area
-  // Each desk group: DESK_FRONT (3 tiles wide × 2 tall) + 1 PC on top of left tile
-  const deskRowYs = [3, 8, 13];
-  const deskColXs = [3, 9];
-  for (const y of deskRowYs) {
-    for (const x of deskColXs) {
-      items.push({
-        type: "DESK_FRONT",
-        file: "/pixel-office/furniture/DESK/DESK_FRONT.png",
-        x,
-        y,
-        tilesW: 3,
-        tilesH: 2,
-      });
-      // PC sits on top of desk (1 tile wide × 2 tall, anchored above desk)
-      items.push({
-        type: "PC_FRONT_OFF",
-        file: "/pixel-office/furniture/PC/PC_FRONT_OFF.png",
-        x: x + 1,
-        y: y - 1,
-        tilesW: 1,
-        tilesH: 2,
-      });
-    }
+  // Desks (PCs are rendered separately so we can swap to ON frames when occupied)
+  for (const g of DESK_GROUPS) {
+    items.push({
+      type: "DESK_FRONT",
+      file: "/pixel-office/furniture/DESK/DESK_FRONT.png",
+      x: g.deskCol,
+      y: g.deskRow,
+      tilesW: 3,
+      tilesH: 2,
+    });
   }
 
   // Plants in main room corners
   items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 1, y: 1, tilesW: 1, tilesH: 2 });
-  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 16, y: 1, tilesW: 1, tilesH: 2 });
-  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 1, y: 16, tilesW: 1, tilesH: 2 });
-  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 16, y: 16, tilesW: 1, tilesH: 2 });
+  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 21, y: 1, tilesW: 1, tilesH: 2 });
+  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 1, y: 18, tilesW: 1, tilesH: 2 });
+  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 21, y: 18, tilesW: 1, tilesH: 2 });
 
-  // Cactus in mid main area
-  items.push({ type: "CACTUS", file: "/pixel-office/furniture/CACTUS/CACTUS.png", x: 7, y: 11, tilesW: 1, tilesH: 1 });
+  // Cactus accent in main room
+  items.push({ type: "CACTUS", file: "/pixel-office/furniture/CACTUS/CACTUS.png", x: 19, y: 11, tilesW: 1, tilesH: 1 });
 
-  // Meeting room: 2 small chairs + 1 plant
-  items.push({ type: "CUSHIONED_CHAIR_FRONT", file: "/pixel-office/furniture/CUSHIONED_CHAIR/CUSHIONED_CHAIR_FRONT.png", x: 22, y: 4, tilesW: 1, tilesH: 1 });
-  items.push({ type: "CUSHIONED_CHAIR_FRONT", file: "/pixel-office/furniture/CUSHIONED_CHAIR/CUSHIONED_CHAIR_FRONT.png", x: 24, y: 4, tilesW: 1, tilesH: 1 });
-  items.push({ type: "PLANT", file: "/pixel-office/furniture/PLANT/PLANT.png", x: 19, y: 1, tilesW: 1, tilesH: 2 });
-  items.push({ type: "PLANT", file: "/pixel-office/furniture/PLANT/PLANT.png", x: 26, y: 1, tilesW: 1, tilesH: 2 });
+  // Meeting room: chairs + plants
+  for (const c of CHAIRS.filter((x) => x.area === "meeting")) {
+    items.push({
+      type: "CUSHIONED_CHAIR_FRONT",
+      file: "/pixel-office/furniture/CUSHIONED_CHAIR/CUSHIONED_CHAIR_FRONT.png",
+      x: c.col,
+      y: c.row,
+      tilesW: 1,
+      tilesH: 1,
+    });
+  }
+  items.push({ type: "PLANT", file: "/pixel-office/furniture/PLANT/PLANT.png", x: 24, y: 1, tilesW: 1, tilesH: 2 });
+  items.push({ type: "PLANT", file: "/pixel-office/furniture/PLANT/PLANT.png", x: 33, y: 1, tilesW: 1, tilesH: 2 });
+  items.push({ type: "CLOCK", file: "/pixel-office/furniture/CLOCK/CLOCK.png", x: 29, y: 1, tilesW: 1, tilesH: 1 });
 
-  // Lounge: SOFA + plants + clock
-  items.push({ type: "SOFA_FRONT", file: "/pixel-office/furniture/SOFA/SOFA_FRONT.png", x: 21, y: 13, tilesW: 3, tilesH: 1 });
-  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 19, y: 9, tilesW: 1, tilesH: 2 });
-  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 26, y: 9, tilesW: 1, tilesH: 2 });
-  items.push({ type: "BIN", file: "/pixel-office/furniture/BIN/BIN.png", x: 19, y: 17, tilesW: 1, tilesH: 1 });
+  // Lounge: sofas + chairs + plants + bin
+  for (const s of SOFAS) {
+    items.push({
+      type: "SOFA_FRONT",
+      file: "/pixel-office/furniture/SOFA/SOFA_FRONT.png",
+      x: s.col,
+      y: s.row,
+      tilesW: 2,
+      tilesH: 1,
+    });
+  }
+  for (const c of CHAIRS.filter((x) => x.area === "lounge")) {
+    items.push({
+      type: "CUSHIONED_CHAIR_FRONT",
+      file: "/pixel-office/furniture/CUSHIONED_CHAIR/CUSHIONED_CHAIR_FRONT.png",
+      x: c.col,
+      y: c.row,
+      tilesW: 1,
+      tilesH: 1,
+    });
+  }
+  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 24, y: 12, tilesW: 1, tilesH: 2 });
+  items.push({ type: "LARGE_PLANT", file: "/pixel-office/furniture/LARGE_PLANT/LARGE_PLANT.png", x: 33, y: 12, tilesW: 1, tilesH: 2 });
+  items.push({ type: "BIN", file: "/pixel-office/furniture/BIN/BIN.png", x: 24, y: 19, tilesW: 1, tilesH: 1 });
 
   return items;
 }
 
-// CSS filters that fake HSB colorize on a greyscale tile.
-// Pixel-agents uses HSB color with hue, saturation, brightness, contrast.
-// We approximate with CSS sepia → hue-rotate → saturate → brightness → contrast,
-// which lands close enough for a pixel-art office look.
 const ROOM_FLOOR_FILTERS = {
   wood: "sepia(1) saturate(2.2) hue-rotate(-15deg) brightness(0.62) contrast(1.05)",
   beige: "sepia(0.55) saturate(0.9) hue-rotate(-5deg) brightness(1.05) contrast(0.95)",
@@ -97,13 +251,6 @@ const ROOM_WALL_COLOR = {
 
 type RoomKey = keyof typeof ROOM_FLOOR_FILTERS;
 
-function roomAtTile(col: number, row: number): RoomKey | null {
-  if (col >= MAIN_ROOM.x && col < MAIN_ROOM.x + MAIN_ROOM.w && row >= MAIN_ROOM.y && row < MAIN_ROOM.y + MAIN_ROOM.h) return "wood";
-  if (col >= MEETING_ROOM.x && col < MEETING_ROOM.x + MEETING_ROOM.w && row >= MEETING_ROOM.y && row < MEETING_ROOM.y + MEETING_ROOM.h) return "beige";
-  if (col >= LOUNGE_ROOM.x && col < LOUNGE_ROOM.x + LOUNGE_ROOM.w && row >= LOUNGE_ROOM.y && row < LOUNGE_ROOM.y + LOUNGE_ROOM.h) return "blue";
-  return null;
-}
-
 interface RoomBox {
   key: RoomKey;
   pattern: string;
@@ -114,25 +261,36 @@ interface RoomBox {
 }
 
 const ROOMS: RoomBox[] = [
-  // wood plank pattern for main room
   { key: "wood", pattern: "/pixel-office/floors/floor_5.png", ...MAIN_ROOM },
-  // tile pattern for meeting
   { key: "beige", pattern: "/pixel-office/floors/floor_4.png", ...MEETING_ROOM },
-  // smooth carpet for lounge
   { key: "blue", pattern: "/pixel-office/floors/floor_0.png", ...LOUNGE_ROOM },
 ];
 
 export interface PixelOfficeRendererProps {
   /** Children rendered as the agents layer (positioned absolutely inside the room). */
   children?: React.ReactNode;
+  /** Set of PC seat ids that currently have an agent working — flips PC sprites to ON. */
+  occupiedPcSeatIds?: Set<string>;
 }
 
-export function PixelOfficeRenderer({ children }: PixelOfficeRendererProps) {
-  const furniture = useMemo(buildFurniture, []);
+const PC_ON_FRAMES = [
+  "/pixel-office/furniture/PC/PC_FRONT_ON_1.png",
+  "/pixel-office/furniture/PC/PC_FRONT_ON_2.png",
+  "/pixel-office/furniture/PC/PC_FRONT_ON_3.png",
+];
+const PC_OFF_FRAME = "/pixel-office/furniture/PC/PC_FRONT_OFF.png";
 
-  // Walkable bounds (in pixels) for agent wandering — main room interior padded
-  // by 2 tiles on edges to keep them away from walls/desks.
-  void roomAtTile;
+export function PixelOfficeRenderer({ children, occupiedPcSeatIds }: PixelOfficeRendererProps) {
+  const furniture = useMemo(buildStaticFurniture, []);
+
+  // Animate "ON" PCs by cycling through 3 frames at ~2.5fps.
+  const [pcFrame, setPcFrame] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setPcFrame((f) => (f + 1) % PC_ON_FRAMES.length);
+    }, 400);
+    return () => window.clearInterval(id);
+  }, []);
 
   return (
     <div
@@ -146,8 +304,6 @@ export function PixelOfficeRenderer({ children }: PixelOfficeRendererProps) {
         imageRendering: "pixelated",
       }}
     >
-      {/* Outer dark area is just the bg color above. Each room paints its tinted floor on top. */}
-
       {/* Room floors */}
       {ROOMS.map((room) => (
         <div
@@ -183,7 +339,7 @@ export function PixelOfficeRenderer({ children }: PixelOfficeRendererProps) {
         />
       ))}
 
-      {/* Furniture layer */}
+      {/* Static furniture layer */}
       {furniture.map((f, i) => (
         <img
           key={`${f.type}-${i}`}
@@ -200,6 +356,29 @@ export function PixelOfficeRenderer({ children }: PixelOfficeRendererProps) {
           draggable={false}
         />
       ))}
+
+      {/* PCs (animated when occupied) */}
+      {DESK_GROUPS.map((g) => {
+        const seatId = `pc-seat-${g.pcId}`;
+        const on = occupiedPcSeatIds?.has(seatId) ?? false;
+        const src = on ? PC_ON_FRAMES[pcFrame] : PC_OFF_FRAME;
+        return (
+          <img
+            key={`pc-${g.pcId}`}
+            src={src}
+            alt=""
+            className="absolute pointer-events-none select-none"
+            style={{
+              left: g.pcCol * TILE,
+              top: g.pcRow * TILE,
+              width: 1 * TILE,
+              height: 2 * TILE,
+              imageRendering: "pixelated",
+            }}
+            draggable={false}
+          />
+        );
+      })}
 
       {/* Agents layer (children render absolutely on this stage) */}
       <div className="absolute inset-0">{children}</div>
@@ -226,11 +405,10 @@ export function PixelOfficeRenderer({ children }: PixelOfficeRendererProps) {
 }
 
 /**
- * Walkable area for agents — confined to the main wood-floor room interior.
+ * Walkable area for agents wandering — confined to the main wood-floor room interior.
  * Returns pixel rect agents can target.
  */
 export function getWalkableBounds(): { minX: number; minY: number; maxX: number; maxY: number } {
-  // Keep 2-tile inset from main room edges so agents don't overlap desks/plants
   const insetX = 2;
   const insetY = 2;
   return {
